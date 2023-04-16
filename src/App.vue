@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue';
 import CountryProfileComponent from './components/CountryProfileComponent.vue';
 
@@ -8,23 +8,52 @@ const mockCountry = {
   description:
     'The United States of America is a country primarily located in North America. It consists of 50 states, a federal district, five major self-governing territories, 326 Indian reservations, and some minor possessions.',
 };
-</script>
+</script> -->
 
-<!-- <template>
-  <div>
-    <h1 class="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-    <CountryProfileComponent :country="mockCountry" />
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
-</template> -->
+<!-- <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import CountryProfileComponent from './components/CountryProfileComponent.vue';
+
+const countries = ref([]);
+
+async function fetchCountries() {
+  try {
+    const response = await axios.get('https://api.worldbank.org/v2/country?format=json&per_page=300');
+    countries.value = response.data[1];
+  } catch (error) {
+    console.error('Error fetching countries:', error);
+  }
+}
+
+onMounted(fetchCountries);
+</script> -->
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import CountryProfileComponent from './components/CountryProfileComponent.vue';
+
+interface Country {
+  id: string;
+  name: string;
+  region: { value: string };
+  capitalCity: string;
+}
+
+const countries = ref<Country[]>([]);
+
+async function fetchCountries() {
+  try {
+    const response = await axios.get('https://api.worldbank.org/v2/country?format=json&per_page=300');
+    countries.value = response.data[1];
+  } catch (error) {
+    console.error('Error fetching countries:', error);
+  }
+}
+
+onMounted(fetchCountries);
+</script>
 
 <template>
   <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
@@ -33,16 +62,7 @@ const mockCountry = {
         Hello world!
       </h1>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <CountryProfileComponent :country="mockCountry" />
-        <CountryProfileComponent :country="mockCountry" />
-        <CountryProfileComponent :country="mockCountry" />
-        <CountryProfileComponent :country="mockCountry" />
-        <CountryProfileComponent :country="mockCountry" />
-        <CountryProfileComponent :country="mockCountry" />
-        <CountryProfileComponent :country="mockCountry" />
-        <CountryProfileComponent :country="mockCountry" />
-        <CountryProfileComponent :country="mockCountry" />
-        <CountryProfileComponent :country="mockCountry" />
+        <CountryProfileComponent v-for="country in countries" :key="country.id" :country="country" />
         <!-- Add more CountryCard components as needed -->
       </div>
     </div>
