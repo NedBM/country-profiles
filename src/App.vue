@@ -30,9 +30,10 @@ onMounted(fetchCountries);
 </script> -->
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import CountryProfileComponent from './components/CountryProfileComponent.vue';
+import CountrySearchComponent from './components/CountrySearchComponent.vue';
 
 interface Country {
   id: string;
@@ -42,6 +43,10 @@ interface Country {
 }
 
 const countries = ref<Country[]>([]);
+const filteredCountries = computed(() =>
+  countries.value.filter((country) => country.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
+);
+const searchTerm = ref('');
 
 async function fetchCountries() {
   try {
@@ -52,6 +57,13 @@ async function fetchCountries() {
   }
 }
 
+
+function searchCountries(search: string) {
+  searchTerm.value = search;
+}
+
+
+
 onMounted(fetchCountries);
 </script>
 
@@ -61,8 +73,9 @@ onMounted(fetchCountries);
       <h1 class="text-3xl font-bold underline mb-8">
         Hello world!
       </h1>
+      <CountrySearchComponent @search="searchCountries" />
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <CountryProfileComponent v-for="country in countries" :key="country.id" :country="country" />
+        <CountryProfileComponent v-for="country in filteredCountries" :key="country.id" :country="country" />
         <!-- Add more CountryCard components as needed -->
       </div>
     </div>
