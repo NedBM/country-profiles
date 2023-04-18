@@ -19,6 +19,11 @@
           <div class="mt-4">
             <div class="text-sm font-semibold text-gray-700">GNI per capita:</div>
             <div class="text-lg font-medium text-gray-900">{{ gniPerCapita ? `$${gniPerCapita.toFixed(2)}` : 'N/A' }}</div>
+            <div>
+            <router-link :to="{ name: 'CountryDetail', params: { id: props.country.id } }" class="text-indigo-600 hover:text-indigo-900">
+      View Details
+    </router-link>
+  </div>
           </div>
         </div>
       </div>
