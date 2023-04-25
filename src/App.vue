@@ -1,33 +1,4 @@
-<!-- <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue';
-import CountryProfileComponent from './components/CountryProfileComponent.vue';
 
-const mockCountry = {
-  name: 'United States',
-  region: 'North America',
-  description:
-    'The United States of America is a country primarily located in North America. It consists of 50 states, a federal district, five major self-governing territories, 326 Indian reservations, and some minor possessions.',
-};
-</script> -->
-
-<!-- <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import CountryProfileComponent from './components/CountryProfileComponent.vue';
-
-const countries = ref([]);
-
-async function fetchCountries() {
-  try {
-    const response = await axios.get('https://api.worldbank.org/v2/country?format=json&per_page=300');
-    countries.value = response.data[1];
-  } catch (error) {
-    console.error('Error fetching countries:', error);
-  }
-}
-
-onMounted(fetchCountries);
-</script> -->
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
@@ -70,13 +41,14 @@ onMounted(fetchCountries);
 <template>
   <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
     <div class="container mx-auto px-4">
-      <h1 class="text-3xl font-bold underline mb-8">
-        Hello world!
+      <h1 class="text-3xl font-bold mb-8">
+       Country Profile App
       </h1>
+      <div class="my-6"> 
       <CountrySearchComponent @search="searchCountries" />
+    </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <CountryProfileComponent v-for="country in filteredCountries" :key="country.id" :country="country" />
-        <!-- Add more CountryCard components as needed -->
       </div>
     </div>
   </div>
