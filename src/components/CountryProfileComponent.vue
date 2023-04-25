@@ -9,26 +9,58 @@ const props = defineProps({
   },
 });
 
+interface Country {
+  id: string;
+  iso2Code: string;
+  name: string;
+  region: {
+    value: string;
+  };
+  incomeLevel: {
+    value: string
+  }
+}
+
+
 const gdpPerCapita = ref<number | null>(null);
 const gniPerCapita = ref<number | null>(null);
 
+onMounted(fetchEconomicData);
+
 async function fetchEconomicData() {
   try {
-    const gdpResponse = await axios.get(
-      `https://api.worldbank.org/v2/country/${props.country.id}/indicator/NY.GDP.PCAP.CD?format=json&date=2019&per_page=1`
-    );
-    const gniResponse = await axios.get(
-      `https://api.worldbank.org/v2/country/${props.country.id}/indicator/NY.GNP.PCAP.CD?format=json&date=2019&per_page=1`
+    const countriesResponse = await axios.get(
+      'https://api.worldbank.org/v2/country?format=json&per_page=300'
     );
 
-    gdpPerCapita.value = gdpResponse.data[1][0]?.value || null;
-    gniPerCapita.value = gniResponse.data[1][0]?.value || null;
+    const countries = countriesResponse.data[1].filter(
+      (country: Country) =>
+        country.iso2Code.length === 2 &&
+        country.region.value !== 'Aggregates' &&
+        country.incomeLevel.value !== 'Aggregates'
+    );
+
+    // Loop through the countries array and fetch economic data
+    for (const country of countries) {
+      // Fetch GDP and GNI data for each country
+      const gdpResponse = await axios.get(
+        `https://api.worldbank.org/v2/country/${country.id}/indicator/NY.GDP.PCAP.CD?format=json&date=2019&per_page=1`
+      );
+      const gniResponse = await axios.get(
+        `https://api.worldbank.org/v2/country/${country.id}/indicator/NY.GNP.PCAP.CD?format=json&date=2019&per_page=1`
+      );
+
+      const gdpPerCapita = gdpResponse.data[1][0]?.value || null;
+      const gniPerCapita = gniResponse.data[1][0]?.value || null;
+
+      // console.log(
+      //   `${country}`
+      // );
+    }
   } catch (error) {
     console.error('Error fetching economic data:', error);
   }
 }
-
-onMounted(fetchEconomicData);
 </script>
 
 <template>

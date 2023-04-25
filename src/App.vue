@@ -6,11 +6,23 @@ import axios from 'axios';
 import CountryProfileComponent from './components/CountryProfileComponent.vue';
 import CountrySearchComponent from './components/CountrySearchComponent.vue';
 
+// interface Country {
+//   id: string;
+//   name: string;
+//   region: { value: string };
+//   capitalCity: string;
+// }
+
 interface Country {
   id: string;
+  iso2Code: string;
   name: string;
-  region: { value: string };
-  capitalCity: string;
+  region: {
+    value: string;
+  };
+  incomeLevel: {
+    value: string
+  }
 }
 
 const countries = ref<Country[]>([]);
@@ -22,7 +34,12 @@ const searchTerm = ref('');
 async function fetchCountries() {
   try {
     const response = await axios.get('https://api.worldbank.org/v2/country?format=json&per_page=300');
-    countries.value = response.data[1];
+    countries.value = response.data[1].filter(
+      (country: Country) =>
+        country.iso2Code.length === 2 &&
+        country.region.value !== 'Aggregates' &&
+        country.incomeLevel.value !== 'Aggregates'
+    );
   } catch (error) {
     console.error('Error fetching countries:', error);
   }
