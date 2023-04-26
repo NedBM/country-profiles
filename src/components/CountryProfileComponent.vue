@@ -83,12 +83,12 @@ async function fetchEconomicData() {
             <div class="text-sm font-semibold text-gray-700">GNI per capita:</div>
             <div class="text-lg font-medium text-gray-900">{{ gniPerCapita ? `$${gniPerCapita.toFixed(2)}` : 'N/A' }}</div>
             <div>
-              <a
-  class="text-indigo-600 hover:text-indigo-900 cursor-pointer"
+              <button
+  class="text-indigo-600 hover:text-indigo-900"
   @click="navigateToCountryDetails"
 >
   View Details
-</a>
+</button>
   </div>
           </div>
         </div>

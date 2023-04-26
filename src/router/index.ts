@@ -1,17 +1,18 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import App from '../App.vue';
-import CountryDetailsComponent from '../components/CountryDetails.vue';
+import Home from '../components/Home.vue'
+
+import CountryDetailComponent from '../components/CountryDetailComponent.vue'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'App',
-    component: App,
+    name: 'Home',
+    component: Home,
   },
   {
     path: "/country/:id",
     name: "CountryDetails",
-    component: CountryDetailsComponent,
+    component: CountryDetailComponent,
   },
 ];
 
