@@ -6,13 +6,6 @@ import axios from 'axios';
 import CountryProfileComponent from './components/CountryProfileComponent.vue';
 import CountrySearchComponent from './components/CountrySearchComponent.vue';
 
-// interface Country {
-//   id: string;
-//   name: string;
-//   region: { value: string };
-//   capitalCity: string;
-// }
-
 interface Country {
   id: string;
   iso2Code: string;

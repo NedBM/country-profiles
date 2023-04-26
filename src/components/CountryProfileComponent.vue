@@ -41,22 +41,15 @@ async function fetchEconomicData() {
     );
 
     // Loop through the countries array and fetch economic data
-    for (const country of countries) {
-      // Fetch GDP and GNI data for each country
-      const gdpResponse = await axios.get(
-        `https://api.worldbank.org/v2/country/${country.id}/indicator/NY.GDP.PCAP.CD?format=json&date=2019&per_page=1`
-      );
-      const gniResponse = await axios.get(
-        `https://api.worldbank.org/v2/country/${country.id}/indicator/NY.GNP.PCAP.CD?format=json&date=2019&per_page=1`
-      );
+    const gdpResponse = await axios.get(
+      `https://api.worldbank.org/v2/country/${props.country.id}/indicator/NY.GDP.PCAP.CD?format=json&date=2019&per_page=1`
+    );
+    const gniResponse = await axios.get(
+      `https://api.worldbank.org/v2/country/${props.country.id}/indicator/NY.GNP.PCAP.CD?format=json&date=2019&per_page=1`
+    );
 
-      const gdpPerCapita = gdpResponse.data[1][0]?.value || null;
-      const gniPerCapita = gniResponse.data[1][0]?.value || null;
-
-      // console.log(
-      //   `${country}`
-      // );
-    }
+    gdpPerCapita.value = gdpResponse.data[1][0]?.value || null;
+    gniPerCapita.value = gniResponse.data[1][0]?.value || null;
   } catch (error) {
     console.error('Error fetching economic data:', error);
   }
@@ -83,9 +76,9 @@ async function fetchEconomicData() {
             <div class="text-sm font-semibold text-gray-700">GNI per capita:</div>
             <div class="text-lg font-medium text-gray-900">{{ gniPerCapita ? `$${gniPerCapita.toFixed(2)}` : 'N/A' }}</div>
             <div>
-            <router-link :to="{ name: 'CountryDetail', params: { id: props.country.id } }" class="text-indigo-600 hover:text-indigo-900">
-      View Details
-    </router-link>
+              <router-link :to="{ name: 'CountryDetail', params: { id: props.country.id } }" class="text-indigo-600 hover:text-indigo-900">
+  View Details
+</router-link>
   </div>
           </div>
         </div>
