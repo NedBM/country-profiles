@@ -3,8 +3,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
-import CountryProfileComponent from './components/CountryProfileComponent.vue';
-import CountrySearchComponent from './components/CountrySearchComponent.vue';
+import CountryProfileComponent from "./CountryProfileComponent.vue";
+import CountrySearchComponent from "./CountrySearchComponent.vue";
 
 interface Country {
   id: string;
@@ -49,21 +49,22 @@ onMounted(fetchCountries);
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-    <div class="container mx-auto px-4">
+    <div>
       <h1 class="text-3xl font-bold mb-8">
-       Country Profile App
+        Country Profile App
       </h1>
-      <div class="my-6"> 
-      <CountrySearchComponent @search="searchCountries" />
-    </div>
-    <router-view />
+      <div class="my-6">
+        <CountrySearchComponent @search="searchCountries" />
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <CountryProfileComponent v-for="country in filteredCountries" :key="country.id" :country="country" />
+        <CountryProfileComponent
+          v-for="country in filteredCountries"
+          :key="country.id"
+          :country="country"
+        />
       </div>
     </div>
-  </div>
-</template>
+  </template>
 
 <style scoped>
 .logo {

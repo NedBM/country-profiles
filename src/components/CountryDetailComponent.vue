@@ -14,19 +14,14 @@ interface Country {
 }
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useRoute } from 'vue-router';
 
-const props = defineProps({
-  params: {
-    type: Object,
-    required: true,
-  },
-});
-
-const country = ref<Country | null>(null);;
+const route = useRoute();
+const country = ref<Country | null>(null);
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`https://api.worldbank.org/v2/country/${props.params.id}?format=json`);
+    const response = await axios.get(`https://api.worldbank.org/v2/country/${route.params.id}?format=json`);
     country.value = response.data[1][0];
   } catch (error) {
     console.error('Error fetching country:', error);
