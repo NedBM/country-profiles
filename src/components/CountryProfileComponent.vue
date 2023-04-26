@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const props = defineProps({
   country: {
@@ -19,6 +20,12 @@ interface Country {
   incomeLevel: {
     value: string
   }
+}
+
+const router = useRouter();
+
+function navigateToCountryDetails() {
+  router.push({ name: 'CountryDetails', params: { id: props.country.id } });
 }
 
 
@@ -76,9 +83,12 @@ async function fetchEconomicData() {
             <div class="text-sm font-semibold text-gray-700">GNI per capita:</div>
             <div class="text-lg font-medium text-gray-900">{{ gniPerCapita ? `$${gniPerCapita.toFixed(2)}` : 'N/A' }}</div>
             <div>
-              <router-link :to="{ name: 'CountryDetail', params: { id: props.country.id } }" class="text-indigo-600 hover:text-indigo-900">
+              <a
+  class="text-indigo-600 hover:text-indigo-900 cursor-pointer"
+  @click="navigateToCountryDetails"
+>
   View Details
-</router-link>
+</a>
   </div>
           </div>
         </div>

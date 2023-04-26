@@ -9,10 +9,9 @@ const routes: RouteRecordRaw[] = [
     component: App,
   },
   {
-    path: '/country/:id',
-    name: 'CountryDetailsComponent',
+    path: "/country/:id",
+    name: "CountryDetails",
     component: CountryDetailsComponent,
-    props: (route) => ({ params: route.params }),
   },
 ];
 

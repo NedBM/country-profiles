@@ -57,6 +57,7 @@ onMounted(fetchCountries);
       <div class="my-6"> 
       <CountrySearchComponent @search="searchCountries" />
     </div>
+    <router-view />
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <CountryProfileComponent v-for="country in filteredCountries" :key="country.id" :country="country" />
       </div>
