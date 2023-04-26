@@ -50,8 +50,8 @@ onMounted(fetchCountries);
 
 <template>
     <div>
-      <h1 class="text-3xl font-bold mb-8 text-stone-300">
-        Country Profile App
+      <h1 class="text-3xl font-bold mb-8 text-stone-300 flex mt-10 ml-20">
+        Country Profiles
       </h1>
       <div class="my-6">
         <CountrySearchComponent @search="searchCountries" />
