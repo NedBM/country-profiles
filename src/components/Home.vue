@@ -50,14 +50,14 @@ onMounted(fetchCountries);
 
 <template>
     <div>
-      <h1 class="text-3xl font-bold mb-8 text-stone-300 flex mt-10 ml-20">
+      <h1 class="text-3xl font-bold mb-8 flex mt-10 ml-20">
         Country Profiles
       </h1>
       
       <div class="my-6">
         <CountrySearchComponent @search="searchCountries" />
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mx-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full items-center">
         <CountryProfileComponent
           v-for="country in filteredCountries"
           :key="country.id"

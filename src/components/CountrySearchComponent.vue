@@ -5,7 +5,7 @@
         type="text"
         v-model="searchTerm"
         @input="onSearch"
-        class="w-full p-2 rounded-md shadow-md border border-stone-600 focus:border-yellow-300 focus:outline-none focus:ring-[1px] focus:ring-yellow-300 bg-stone-800 mx-20 text-yellow-300"
+        class="input w-full mx-10 "
         placeholder="Search for a country..."
       />
     </div>

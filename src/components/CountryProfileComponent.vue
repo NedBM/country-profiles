@@ -70,77 +70,26 @@ async function fetchEconomicData() {
 }
 </script>
 
-<!-- <template>
-  <div class="">
-    <div class="max-w-md mx-auto bg-stone-800 rounded-xl shadow-md overflow-hidden md:max-w-2xl">
-      <div class="md:flex">
-        <div class="md:flex-shrink-0 relative">
-          <img class="h-48 w-full object-cover md:w-80 md:h-48" :src="`https://flagcdn.com/w640/${props.country.iso2Code.toLowerCase()}.png`" :alt="`${props.country.name} Flag`" />
-          <div class="absolute bottom-0 left-0 mb-4 ml-4">
-            <div class="uppercase tracking-wide text-sm text-yellow-300 font-semibold">{{ props.country.name }}</div>
-            <p class=" text-stone-400 text-xs">{{ props.country.capitalCity }}</p>
-            <div class="block mt-1 text-sm leading-tight font-medium text-stone-400">{{ props.country.region.value }}</div>
-          </div>
-        </div>
-        <div class="p-8">
-          <div class="mt-4">
-            <div class="text-sm font-semibold text-stone-500">GDP per capita:</div>
-            <div class="text-sm font-medium text-stone-400">{{ gdpPerCapita ? `$${formatNumber(gdpPerCapita)}` : 'N/A' }}</div>
-          </div>
-          <div class="mt-4">
-            <div class="text-sm font-semibold text-stone-500">GNI per capita:</div>
-            <div class="text-sm font-medium text-stone-400">{{ gniPerCapita ? `$${formatNumber(gniPerCapita)}` : 'N/A' }}</div>
-            <div>
-              <button
-  class="text-yellow-500 hover:text-yellow-200"
-  @click="navigateToCountryDetails"
->
-  View Details
-</button>
-  </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </template> -->
-
-
   <template>
-    <div class="">
-      <div class="max-w-md mx-auto bg-stone-800 rounded-xl shadow-md overflow-hidden md:max-w-2xl mb-12 w-11/12 md:w-auto">
-        <div class="flex flex-col">
-          <div class="w-full">
-            <img
-              class="w-full h-48 object-cover"
-              :src="`https://flagcdn.com/w640/${props.country.iso2Code.toLowerCase()}.png`"
-              :alt="`${props.country.name} Flag`"
-            />
-          </div>
-          <div class="p-8">
-            <div class="mb-2">
-              <div class="uppercase tracking-wide text-md text-yellow-300 font-semibold">{{ props.country.name }}</div>
-              <p class="text-stone-400 text-xs">{{ props.country.capitalCity }}</p>
-              <div class="block mt-1 text-sm leading-tight font-medium text-stone-400">{{ props.country.region.value }}</div>
-            </div>
-            <div class="mt-2 flex flex-row gap-1">
-              <div class="text-sm font-semibold text-stone-500">GDP per capita:</div>
-              <div class="text-sm font-medium text-stone-400">{{ gdpPerCapita ? `$${formatNumber(gdpPerCapita)}` : 'N/A' }}</div>
-            </div>
-            <div class="mt-2 flex flex-row gap-1">
-              <div class="text-sm font-semibold text-stone-500">GNI per capita:</div>
-              <div class="text-sm font-medium text-stone-400">{{ gniPerCapita ? `$${formatNumber(gniPerCapita)}` : 'N/A' }}</div>
-            </div>
-            <div class="mt-2">
-              <button
-                class="text-yellow-500 hover:text-yellow-200"
-                @click="navigateToCountryDetails"
-              >
-                View Details
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="flex justify-self-center">
+    <div class="card w-96 shadow-xl">
+  <figure><img 
+    :src="`https://flagcdn.com/w640/${props.country.iso2Code.toLowerCase()}.png`"
+    :alt="`${props.country.name} Flag`"
+    /></figure>
+  <div class="card-body">
+    <h2 class="card-title">
+      {{ props.country.name }}
+      <div class="badge badge-secondary">{{ props.country.region.value }}</div>
+    </h2>
+    <p>{{ props.country.capitalCity }}</p>
+    <div class="card-actions justify-end items-center">
+      <div class="badge badge-outline">{{ gdpPerCapita ? `$${formatNumber(gdpPerCapita)}` : 'N/A' }}</div>
+      <div class="badge badge-outline">{{ gniPerCapita ? `$${formatNumber(gniPerCapita)}` : 'N/A' }}</div>
+      <button class="btn btn-active btn-ghost btn-sm" @click="navigateToCountryDetails">Details</button>
     </div>
+  </div>
+</div>
+<!-- <div class="divider lg:divider-horizontal"></div>  -->
+</div>
   </template>
