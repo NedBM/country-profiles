@@ -5,6 +5,7 @@ import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import CountryProfileComponent from "./CountryProfileComponent.vue";
 import CountrySearchComponent from "./CountrySearchComponent.vue";
+import { Icon } from '@iconify/vue';
 
 interface Country {
   id: string;
@@ -50,10 +51,14 @@ onMounted(fetchCountries);
 
 <template>
     <div>
-      <h1 class="text-3xl font-bold mb-8 flex mt-10 ml-20">
+      <div class="mb-8 flex mt-10 ml-16 items-center gap-1">
+        <div class="">
+        <Icon icon="mdi:web" class="w-8 h-8" />
+      </div>
+      <h1 class="text-3xl font-bold">
         Country Profiles
       </h1>
-      
+    </div>
       <div class="my-6">
         <CountrySearchComponent @search="searchCountries" />
       </div>
