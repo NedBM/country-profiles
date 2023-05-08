@@ -72,7 +72,7 @@ async function fetchEconomicData() {
 
   <template>
     <div class="flex justify-self-center">
-    <div class="card w-96 shadow-xl">
+    <div class="card w-96 shadow-xl  motion-safe:animate-fadeIn">
   <figure><img 
     :src="`https://flagcdn.com/w640/${props.country.iso2Code.toLowerCase()}.png`"
     :alt="`${props.country.name} Flag`"

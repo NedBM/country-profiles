@@ -52,7 +52,7 @@ onMounted(fetchCountries);
 <template>
     <div>
       <div class="mb-8 flex mt-10 ml-16 items-center gap-1">
-        <div class="">
+        <div class="hover:animate-jump">
         <Icon icon="mdi:web" class="w-8 h-8" />
       </div>
       <h1 class="text-3xl font-bold">
