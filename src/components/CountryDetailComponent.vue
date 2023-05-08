@@ -8,9 +8,9 @@
     </svg>
     <span class="sr-only">Loading...</span>
 </div>
-    <div v-if="country" class="flex w-full items-center flex-col">
+    <div v-if="country" class="flex w-full items-center flex-row gap-14 my-6 content-center justify-center">
     <div id="chart"></div>
-    <div class="stats shadow">
+    <div class="stats shadow stats-vertical border-secondary border-[1px]">
   
   <div class="stat">
     <div class="stat-figure text-accent-content">
@@ -35,7 +35,6 @@
   <div class="stat-value">{{ stats.gdpPerCapita ? `$${formatGDP(stats.gdpPerCapita)}` : 'N/A' }}</div>
   <div class="stat-desc">2020</div>
   </div>
-  
   <div class="stat">
     <div class="stat-figure text-accent-content">
       <svg xmlns="http://www.w3.org/2000/svg" class="accent-content" width="1.5em" height="1.5em" viewBox="0 0 240 240"><path fill="currentColor" d="M245.83 121.63a15.53 15.53 0 0 0-9.52-7.33a73.51 73.51 0 0 0-22.17-2.22c4-19.85 1-35.55-2.06-44.86a16.15 16.15 0 0 0-18.79-10.88a85.53 85.53 0 0 0-28.55 12.12a94.58 94.58 0 0 0-27.11-33.25a16.05 16.05 0 0 0-19.26 0a94.48 94.48 0 0 0-27.11 33.25a85.53 85.53 0 0 0-28.55-12.12a16.15 16.15 0 0 0-18.79 10.88c-3 9.31-6 25-2.06 44.86a73.51 73.51 0 0 0-22.17 2.22a15.53 15.53 0 0 0-9.52 7.33a16 16 0 0 0-1.6 12.27c3.39 12.57 13.8 36.48 45.33 55.32S113.13 208 128.05 208s42.67 0 74-18.78c31.53-18.84 41.94-42.75 45.33-55.32a16 16 0 0 0-1.55-12.27ZM59.14 72.14a.2.2 0 0 1 .23-.15a70.43 70.43 0 0 1 25.81 11.67A118.65 118.65 0 0 0 80 119.17c0 18.74 3.77 34 9.11 46.28A123.59 123.59 0 0 1 69.57 140C51.55 108.62 55.3 84 59.14 72.14Zm3 103.35C35.47 159.57 26.82 140.05 24 129.7a59.82 59.82 0 0 1 22.5-1.17a129.08 129.08 0 0 0 9.15 19.41a142.28 142.28 0 0 0 34 39.56a114.92 114.92 0 0 1-27.55-12.01ZM128 190.4c-9.33-6.94-32-28.23-32-71.23C96 76.7 118.38 55.24 128 48c9.62 7.26 32 28.72 32 71.19c0 42.98-22.67 64.27-32 71.21Zm42.82-106.74A70.43 70.43 0 0 1 196.63 72a.2.2 0 0 1 .23.15c3.84 11.85 7.59 36.47-10.43 67.85a123.32 123.32 0 0 1-19.54 25.48c5.34-12.26 9.11-27.54 9.11-46.28a118.65 118.65 0 0 0-5.18-35.54ZM232 129.72c-2.77 10.25-11.4 29.81-38.09 45.77a114.92 114.92 0 0 1-27.55 12a142.28 142.28 0 0 0 34-39.56a129.08 129.08 0 0 0 9.15-19.41a59.69 59.69 0 0 1 22.49 1.19Z"/></svg>
@@ -143,6 +142,8 @@ function numberWithCommas(x: number) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+
+
 function drawAccessToElectricityChart(data: ElectricityData[]) {
   // Set the dimensions and margins of the graph
   const margin = { top: 10, right: 30, bottom: 30, left: 60 },
@@ -157,6 +158,8 @@ function drawAccessToElectricityChart(data: ElectricityData[]) {
     .attr('height', height + margin.top + margin.bottom)
     .append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    
 
   // Create X and Y scales
   const x = d3.scaleLinear().domain([2000, 2020]).range([0, width]);
@@ -176,9 +179,50 @@ function drawAccessToElectricityChart(data: ElectricityData[]) {
     .append('path')
     .datum(data)
     .attr('fill', 'none')
-    .attr('stroke', 'steelblue')
-    .attr('stroke-width', 1.5)
+    .attr('stroke', '#FFFFFF')
+    .attr('stroke-width', 3)
     .attr('d', line);
+
+    svg
+  .selectAll('.data-point')
+  .data(data)
+  .join('circle')
+  .attr('class', 'data-point')
+  .attr('cx', (d) => x(d.year))
+  .attr('cy', (d) => y(d.percentage))
+  .attr('r', 6)
+  .attr('fill', '#FFFFFF');
+
+// Add tooltips to display the percentage in that year
+const tooltip = d3
+  .select('body')
+  .append('div')
+  .attr('class', 'tooltip')
+  .style('position', 'absolute')
+  .style('visibility', 'hidden')
+  .style('background-color', '#FFFFFF')
+  .style('padding', '5px')
+  .style('border-radius', '3px')
+  .style('text-align', 'center');
+
+svg
+  .selectAll('.data-point')
+  .on('mouseover', (event, d) => {
+    tooltip
+      .style('visibility', 'visible')
+      .html((d: any) => {
+  const dataPoint = d as ElectricityData;
+  return `Year: ${dataPoint.year}<br>Percentage: ${dataPoint.percentage.toFixed(2)}%`;
+});
+  })
+  .on('mousemove', (event) => {
+    tooltip
+      .style('top', `${event.pageY - 10}px`)
+      .style('left', `${event.pageX + 10}px`);
+  })
+  .on('mouseout', () => {
+    tooltip.style('visibility', 'hidden');
+  });
 }
 
 
