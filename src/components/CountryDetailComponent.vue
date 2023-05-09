@@ -185,6 +185,7 @@ svg
 
 <template>
   <div>
+    TEST
   <div class="w-full">
     <div class="flex justify-start items-start">
     <button class="btn btn-square m-4 hover:animate-rotate-x hover:animate-once hover:animate-duration-[1200ms] hover:animate-ease-out hover:animate-alternate hover:animate-fill-both" @click="navigateToHome" >
