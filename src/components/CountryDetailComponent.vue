@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import * as d3 from 'd3';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
-import { Transition } from 'vue';
 interface Country {
   id: string;
   name: string;
@@ -160,7 +159,7 @@ function drawAccessToElectricityChart(data: ElectricityData[]) {
   .attr('cx', (d) => x(d.year))
   .attr('cy', (d) => y(d.percentage))
   .attr('r', 6)
-  .attr('fill', '#FFFFFF');
+  .attr('fill', (d) => (d.year === currentYear.value ? 'red' : '#FFFFFF'));
 
 // Add tooltips to display the percentage in that year
 const tooltip = d3
@@ -180,7 +179,7 @@ svg
   const dataPoint = d as ElectricityData;
   tooltip
     .style('visibility', 'visible')
-    .html(`Year: ${dataPoint.year}<br>Percentage: ${dataPoint.percentage.toFixed(2)}%`);
+    .html(`<div class="text-accent">Year: ${dataPoint.year}<br>Percentage: ${dataPoint.percentage.toFixed(2)}%</div>`);
 })
 .on('mousemove', (event) => {
   tooltip
