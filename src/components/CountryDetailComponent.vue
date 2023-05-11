@@ -175,23 +175,21 @@ const tooltip = d3
   .style('text-align', 'center');
 
 svg
-  .selectAll('.data-point')
-  .on('mouseover', (event, d) => {
-    tooltip
-      .style('visibility', 'visible')
-      .html((d: any) => {
+.selectAll('.data-point')
+.on('mouseover', function(event, d) {
   const dataPoint = d as ElectricityData;
-  return `Year: ${dataPoint.year}<br>Percentage: ${dataPoint.percentage.toFixed(2)}%`;
+  tooltip
+    .style('visibility', 'visible')
+    .html(`Year: ${dataPoint.year}<br>Percentage: ${dataPoint.percentage.toFixed(2)}%`);
+})
+.on('mousemove', (event) => {
+  tooltip
+    .style('top', `${event.pageY - 10}px`)
+    .style('left', `${event.pageX + 10}px`);
+})
+.on('mouseout', () => {
+  tooltip.style('visibility', 'hidden');
 });
-  })
-  .on('mousemove', (event) => {
-    tooltip
-      .style('top', `${event.pageY - 10}px`)
-      .style('left', `${event.pageX + 10}px`);
-  })
-  .on('mouseout', () => {
-    tooltip.style('visibility', 'hidden');
-  });
 }
 
 
