@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
+import { Transition } from 'vue';
 interface Country {
   id: string;
   name: string;
@@ -34,7 +35,7 @@ onMounted(async () => {
     country.value = response.data[1][0];
     
     // Call fetchAccessToElectricityData() after fetching data
-    await fetchAccessToElectricityData(); fetchCountryStats();
+    await fetchAccessToElectricityData(); fetchCountryStats(currentYear.value);
   } catch (error) {
     console.error('Error fetching country:', error);
   }
@@ -57,16 +58,17 @@ async function fetchAccessToElectricityData() {
   }
 }
 
-async function fetchCountryStats() {
+const currentYear = ref(2020);
+async function fetchCountryStats(year: number) {
   try {
     const responsePopulation = await axios.get(
-      `https://api.worldbank.org/v2/country/${country.value?.id}/indicator/SP.POP.TOTL?format=json&date=2020`
+      `https://api.worldbank.org/v2/country/${country.value?.id}/indicator/SP.POP.TOTL?format=json&date=${year}`
     );
     const responseGdpPerCapita = await axios.get(
-      `https://api.worldbank.org/v2/country/${country.value?.id}/indicator/NY.GDP.PCAP.CD?format=json&date=2020`
+      `https://api.worldbank.org/v2/country/${country.value?.id}/indicator/NY.GDP.PCAP.CD?format=json&date=${year}`
     );
     const responseLifeExpectancy = await axios.get(
-      `https://api.worldbank.org/v2/country/${country.value?.id}/indicator/SP.DYN.LE00.IN?format=json&date=2020`
+      `https://api.worldbank.org/v2/country/${country.value?.id}/indicator/SP.DYN.LE00.IN?format=json&date=${year}`
     );
 
     stats.value = {
@@ -74,10 +76,24 @@ async function fetchCountryStats() {
       gdpPerCapita: responseGdpPerCapita.data[1][0].value,
       lifeExpectancy: responseLifeExpectancy.data[1][0].value
     };
+    currentYear.value = year;
   } catch (error) {
     console.error('Error fetching country stats:', error);
   }
 }
+
+function nextYear() {
+  if (currentYear.value < 2021) {
+    currentYear.value++;
+    fetchCountryStats(currentYear.value);
+  }
+}
+
+function prevYear() {
+    currentYear.value--;
+    fetchCountryStats(currentYear.value);
+}
+const isDataUnavailable = computed(() => currentYear.value === 2021);
 
 const router = useRouter();
 function navigateToHome() {
@@ -202,19 +218,27 @@ svg
 </div>
     <div v-if="country" class="flex w-full items-center md:flex-row gap-14 my-6 content-center justify-center flex-col">
     <div id="chart"></div>
+    <div class="flex items-center gap-4">
+    <div class="tooltip" data-tip="Prev Year" @click="prevYear">
+      <button class="btn">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
+</svg>
+</button>
+    </div>
     <div class="stats shadow stats-vertical border-secondary border-[1px]">
-  
+      <div class="stat" key="currentYear">
+        {{ currentYear }}
+      </div>
   <div class="stat">
     <div class="stat-figure text-accent-content">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
   <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
 </svg>
-
     </div>
     <div class="stat-title">Population</div>
     <div class="stat-title">Population</div>
   <div class="stat-value animate-fade-up">{{ stats.population ? `${numberWithCommas(stats.population)}` : 'N/A' }}</div>
-  <div class="stat-desc animate-fade-up">2020</div>
   </div>
   
   <div class="stat">
@@ -222,14 +246,9 @@ svg
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
   <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 </svg>
-
-
     </div>
-    
-    
     <div class="stat-title">GDP per capita</div>
   <div class="stat-value animate-fade-up">{{ stats.gdpPerCapita ? `$${formatGDP(stats.gdpPerCapita)}` : 'N/A' }}</div>
-  <div class="stat-desc animate-fade-up">2020</div>
   </div>
   <div class="stat">
     <div class="stat-figure text-accent-content">
@@ -237,10 +256,16 @@ svg
     </div>
     <div class="stat-title">Life expectancy at birth</div>
   <div class="stat-value animate-fade-up">{{ stats.lifeExpectancy ? `${formatGDP(stats.lifeExpectancy)}` : 'N/A' }}</div>
-  <div class="stat-desc animate-fade-up">2020</div>
   </div>
-  
 </div>
+<div class="tooltip" :data-tip="isDataUnavailable ? 'Data unavailable' : 'Next Year'" @click="nextYear">
+      <button class="btn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+  </svg>
+</button>
+    </div>
   </div>
+</div>
   </div>
 </template>
